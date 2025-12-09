@@ -1,0 +1,1 @@
+The practice website from part3 can be accessed via: https://full-stack-exercises-1.onrender.com/
