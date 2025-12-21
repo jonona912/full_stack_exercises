@@ -1,4 +1,4 @@
-DELETE http://localhost:3001/api/persons/3
+DELETE http://localhost:3001/api/persons/693c5dec31d319e72d5cdfe6
 
 
 ###
@@ -9,3 +9,7 @@ Content-Type: application/json
     "name": "John Doe",
     "number": "555-1234"
 }
+
+###
+GET http://localhost:3001/api/persons/69442bd60de86ec334d3f6f8
+
