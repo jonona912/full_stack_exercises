@@ -26,21 +26,24 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newPhoneNum
-    }    
+    }
     const exists = persons.some((obj) => obj.name === personObject.name)
     if (exists) {
       const confirmStatus = confirm(`${personObject.name} is already added to phonebook`)
       if (confirmStatus) {
         const personToUpdate = persons.find(obj => obj.name === personObject.name)
+        console.log("updating contact: ", personToUpdate)
         const updatedPerson = { ...personToUpdate, number: newPhoneNum }
         phonebook_api.updateContact(personToUpdate.id, updatedPerson)
         .then(returnedContact => {
+          console.log("updated contact response: ", returnedContact)
           setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedContact))
           setShowFiltered(showFiltered.map(person => person.id !== personToUpdate.id ? person : returnedContact))
           setNewName('')
           setNewPhoneNum('')
         })
         .catch(failureResponse => {
+          console.log("Caught update error: ", failureResponse)
           setUpdateMsg(`Information of ${personObject.name} has already been removed from server`)
           setNotificationColor('red')
           setTimeout(() => {
