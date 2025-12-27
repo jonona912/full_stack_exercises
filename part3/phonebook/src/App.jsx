@@ -43,7 +43,15 @@ const App = () => {
           setNewPhoneNum('')
         })
         .catch(failureResponse => {
-          console.log("Caught update error: ", failureResponse)
+          console.log("Caught update error: ", failureResponse.response.data.error)
+          if (failureResponse.response.status === 400) {
+            setUpdateMsg(`${failureResponse.response.data.error}`)
+            setNotificationColor('red')
+            setTimeout(() => {
+              setUpdateMsg(null)
+            }, 5000)
+            return
+          }
           setUpdateMsg(`Information of ${personObject.name} has already been removed from server`)
           setNotificationColor('red')
           setTimeout(() => {
@@ -62,15 +70,20 @@ const App = () => {
         setShowFiltered(showFiltered.concat(returnedContact))
         setNewName('')
         setNewPhoneNum('')
+        setUpdateMsg(`Added ${personObject.name}`)
+        setNotificationColor('green')
+        setTimeout(() => {
+          setUpdateMsg(null)
+        }, 5000)
       })
       .catch((failure) => {
-        console.log("Cuaght add error", failure)
+        console.log("Caught add error", failure.response.data.error)
+        setUpdateMsg(`${failure.response.data.error}`)
+        setNotificationColor('red')
+        setTimeout(() => {
+          setUpdateMsg(null)
+        }, 5000)
       })
-      setUpdateMsg(`Added ${personObject.name}`)
-      setNotificationColor('green')
-      setTimeout(() => {
-        setUpdateMsg(null)
-      }, 5000)
     }
   }
 
