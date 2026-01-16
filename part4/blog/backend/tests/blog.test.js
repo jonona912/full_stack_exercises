@@ -36,7 +36,6 @@ describe('total likes', () => {
   })
 })
 
-
 describe('favorite blog', () => {
   const blog_list = [
     {
