@@ -1,4 +1,4 @@
-const Lodash = require('lodash')
+const Lodash = require('lodash') // manipulating arrays, objects, and strings.
 
 const dummy = (blogs) => {
   return 1
