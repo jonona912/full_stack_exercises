@@ -6,4 +6,18 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const create = async (newObject) => {
+  try {
+    const user = JSON.parse(window.localStorage.getItem('user'))
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` }
+    }
+    const response = await axios.post(baseUrl, newObject, config)
+    return response.data
+  } catch (error) {
+    console.error('Error creating blog:', error.response?.statusText || error.message)
+    return null
+  }
+}
+
+export default { getAll, create }
