@@ -6,6 +6,7 @@ import loginService from './services/login'
 import UserLgnInfo from './components/UserLgnInfo'
 import CreateBlog from './components/CreateBlog'
 import ShowNotification from './components/ShowNotification'
+import Togglable from './components/Toggleable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -25,7 +26,6 @@ const App = () => {
       console.log('Logging in with', credentials)
       const user = await loginService.login(credentials)
       // Store the user/token, update state, etc.
-      console.log('Login successful:', user)
       window.localStorage.setItem('user', JSON.stringify(user))
       // Clear the form
       setUser(user)
@@ -45,12 +45,12 @@ const App = () => {
   }
 
   const handleNewBlog = async (blogObject) => {
-    console.log('New blog to be added:', blogObject)
     const returnedBlog = await blogService.create(blogObject)
     if (!returnedBlog) {
       setNotification({ message: 'Error creating blog', color: 'red' })
     } else {
       setBlogs(blogs.concat(returnedBlog))
+      blogs.map(b => console.log('Existing blog:', b))
       setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
     }
     setTimeout(() => {
@@ -58,10 +58,22 @@ const App = () => {
     }, 5000)
   }
 
+  const deleteBlog = async (blogObject) => {
+    if (window.confirm(`Remove blog "${blogObject.title}" by ${blogObject.author}?`)) {
+      await blogService.remove(blogObject.id)
+      setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+    }
+  }
+
+  const handleBlogLike = async (blogObject) => {
+    const updatedBlog = await blogService.update(blogObject.id, blogObject)
+    setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : updatedBlog))
+  }
+
   return (
     <div>
       {user === null ? (
-        <Login 
+        <Login
           handleLogin={handleLogin}
           username={username}
           setUsername={setUsername}
@@ -73,10 +85,14 @@ const App = () => {
           <h2>blogs</h2>
           <ShowNotification notification={notification} />
           <UserLgnInfo user={user} onLogout={handleLogout} />
-          <CreateBlog handleNewBlog={handleNewBlog} />
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
+          <Togglable buttonLabel="new blog">
+            <CreateBlog handleNewBlog={handleNewBlog} />
+          </Togglable>
+          {[...blogs]
+            .sort((a, b) => b.likes - a.likes)
+            .map(blog =>
+              <Blog key={blog.id} blog={blog} onLike={handleBlogLike} onDelete={deleteBlog} />
+            )}
         </>
       )}
     </div>

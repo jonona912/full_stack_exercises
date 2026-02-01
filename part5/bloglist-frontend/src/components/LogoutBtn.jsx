@@ -1,4 +1,4 @@
-const LogoutBtn = ({ onLogout }) => { 
+const LogoutBtn = ({ onLogout }) => {
   return (
     <button onClick={onLogout}>logout</button>
   )
