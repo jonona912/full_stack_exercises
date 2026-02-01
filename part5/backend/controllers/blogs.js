@@ -4,26 +4,10 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const middleware = require('../utils/middleware')
 
-// blogsRouter.get('/', (request, response) => {
-//     Blog.find({}).then((blogs) => {
-//       response.json(blogs)
-//     })
-// })
-
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1})
     response.json(blogs)
 })
-
-// blogsRouter.post('/', (request, response) => {
-//     const blog = new Blog(request.body)
-
-//     blog.save().then((result) => {
-  //       response.status(201).json(result)
-  //     })
-  // })
-
-
 
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   console.log('Creating new blog with body:', request.body)
@@ -40,7 +24,8 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const postResponse = await blog.save()
   request.user.blogs = request.user.blogs.concat(postResponse.id)
   await request.user.save()
-  response.status(201).json(postResponse)
+  const populatedBlog = await postResponse.populate('user', { username: 1, name: 1 })
+  response.status(201).json(populatedBlog)
 })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
