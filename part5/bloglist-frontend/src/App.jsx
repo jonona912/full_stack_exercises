@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
@@ -8,6 +8,7 @@ import CreateBlog from './components/CreateBlog'
 import ShowNotification from './components/ShowNotification'
 import Togglable from './components/Toggleable'
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -15,6 +16,7 @@ const App = () => {
   const [user, setUser] = useState(window.localStorage.getItem('user') ? JSON.parse(window.localStorage.getItem('user')) : null)
   const [notification, setNotification] = useState(null)
 
+  const togglableRef = useRef()
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -52,6 +54,7 @@ const App = () => {
       setBlogs(blogs.concat(returnedBlog))
       blogs.map(b => console.log('Existing blog:', b))
       setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
+      togglableRef.current.hide() // Hide the form after successful creation
     }
     setTimeout(() => {
       setNotification(null)
@@ -59,7 +62,9 @@ const App = () => {
   }
 
   const deleteBlog = async (blogObject) => {
+    console.log('Attempting to delete blog:', blogObject)
     if (window.confirm(`Remove blog "${blogObject.title}" by ${blogObject.author}?`)) {
+      console.log('User confirmed deletion of blog:', blogObject)
       await blogService.remove(blogObject.id)
       setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
     }
@@ -85,7 +90,7 @@ const App = () => {
           <h2>blogs</h2>
           <ShowNotification notification={notification} />
           <UserLgnInfo user={user} onLogout={handleLogout} />
-          <Togglable buttonLabel="new blog">
+          <Togglable buttonLabel="new blog" ref={togglableRef}>
             <CreateBlog handleNewBlog={handleNewBlog} />
           </Togglable>
           {[...blogs]

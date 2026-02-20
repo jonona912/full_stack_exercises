@@ -15,6 +15,8 @@ const CreateBlog = ({ handleNewBlog }) => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    // should toggle the form after creating the blog
+    //
   }
 
   return (
