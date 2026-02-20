@@ -10,7 +10,6 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
-  console.log('Creating new blog with body:', request.body)
   const blog = new Blog(request.body)
   if (!blog.title || !blog.url) {
     return response.status(400).end()
@@ -29,6 +28,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
+  console.log('Attempting to delete blog with id:', request.params.id)
   // if (!request.user) {
   //   return response.status(401).json({ error: 'token missing or invalid' })
   // }
@@ -40,6 +40,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
     return response.status(401).json({ error: 'only the creator can delete a blog' })
   }
 
+  console.log('Deleting blog with id:', request.params.id)
   const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
   return response.status(204).end()
 })

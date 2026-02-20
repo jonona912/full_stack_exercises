@@ -2,3 +2,6 @@ node_modules/
 dist/
 .env
 notes.md
+
+test-results/
+playwright-report/

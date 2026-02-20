@@ -41,6 +41,7 @@ const update = async (id, increaseLike) => {
 }
 
 const remove = async (id) => {
+  console.log('inside remove function with id:', id)
   try {
     const user = JSON.parse(window.localStorage.getItem('user'))
     const config = {
