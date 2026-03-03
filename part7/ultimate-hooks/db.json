@@ -1,0 +1,77 @@
+{
+  "notes": [
+    {
+      "id": "1",
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": "2",
+      "content": "best feature ever <3"
+    },
+    {
+      "id": "05d1",
+      "content": "fjasdf"
+    },
+    {
+      "id": "c17b",
+      "content": "fjasdfasdf"
+    },
+    {
+      "id": "3948",
+      "content": "fjasdfasdfasdfasdf"
+    }
+  ],
+  "persons": [
+    {
+      "id": "1",
+      "name": "mluukkai",
+      "number": "040-5483923"
+    },
+    {
+      "id": "2",
+      "name": "hellas",
+      "number": "012-123123"
+    },
+    {
+      "id": "019f",
+      "name": "jfjfj",
+      "number": "jfjasdf"
+    },
+    {
+      "id": "c46f",
+      "name": "jfjfj",
+      "number": "jfjasdf"
+    },
+    {
+      "id": "bfe7",
+      "name": "jfjfj",
+      "number": "jfjasdf"
+    },
+    {
+      "id": "7d5c",
+      "name": "jfjfj",
+      "number": "jfjasdf"
+    },
+    {
+      "id": "6a41",
+      "name": "jfjfj",
+      "number": "jfjasdf"
+    },
+    {
+      "id": "e094",
+      "name": "jfjfj",
+      "number": "jfjasdf"
+    },
+    {
+      "id": "20b4",
+      "name": "new",
+      "number": "new"
+    },
+    {
+      "id": "75d6",
+      "name": "new 2",
+      "number": "new 2"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
