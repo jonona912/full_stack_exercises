@@ -170,7 +170,6 @@ describe('me', () => {
 
   test('returns current user when authenticated', async () => {
     const testUser = await createTestUser('queryuser', 'classic')
-
     const response = await server.executeOperation(
       {
         query: '{ me { username favoriteGenre id } }',

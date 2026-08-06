@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Automated tests for Full Stack Open part8 library-backend",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "test:mutations": "node --test mutations.test.js"
   },
   "dependencies": {
     "mongodb-memory-server": "^10.4.0"

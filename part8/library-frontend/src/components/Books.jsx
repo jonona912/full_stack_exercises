@@ -10,7 +10,10 @@ const Books = (props) => {
   if (result.loading) {
     return <div>loading...</div>
   }
-
+  if (result.error) {
+    console.error('Error fetching books:', result.error)
+    return <div>Error fetching books</div>
+  }
   const books = result.data.allBooks
 
   return (
@@ -27,7 +30,7 @@ const Books = (props) => {
           {books.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           ))}
