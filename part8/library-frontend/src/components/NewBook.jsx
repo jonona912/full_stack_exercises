@@ -24,14 +24,19 @@ const NewBook = (props) => {
     event.preventDefault()
 
     console.log('add book...')
-    createBook( {
-      variables: {
-        title,
-        author,
-        published: parseInt(published, 10),
-        genres 
-      }
-    })
+    try {
+      await createBook({
+        variables: {
+          title,
+          author,
+          published: parseInt(published, 10),
+          genres 
+        }
+      })
+    } catch (error) {
+      console.log('error', error.extensions)
+      console.error('createBook mutation failed:', error)
+    }
     setTitle('')
     setPublished('')
     setAuthor('')
