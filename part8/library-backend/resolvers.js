@@ -12,11 +12,12 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      const { authorId, genre } = args
+      const { author, genre } = args
 
       const filter = {}
-      if (authorId) filter.author = authorId
+      if (author) filter.author = author
       if (genre) filter.genres = genre
+      console.log('Filtering books with:', filter)
       const books = await Book.find(filter).populate('author')
       return books
     },
@@ -120,14 +121,14 @@ const resolvers = {
     },
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
-  
       if ( !user || args.password !== 'secret' ) {
         throw new GraphQLError('wrong credentials', {
           extensions: {
             code: 'BAD_USER_INPUT'
           }
-        })        
+        })
       }
+      console.log("Generating token for user:", user.username)
       const userForToken = {
         username: user.username,
         id: user._id,

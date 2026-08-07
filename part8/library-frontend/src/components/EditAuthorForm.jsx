@@ -34,7 +34,7 @@ const EditAuthorForm = ({ authors }) => {
         <div>
           <label>
             name
-            <select value={name} onChange={({ target }) => setName(target.value)}>
+            <select name="name" value={name} onChange={({ target }) => setName(target.value)}>
               <option value="">Select an author</option>
               {authors.map((author) => (
                 <option key={author.id} value={author.name}>
