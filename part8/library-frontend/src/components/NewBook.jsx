@@ -3,17 +3,21 @@ import { useMutation } from '@apollo/client/react'
 import { CREATE_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
+  const [title, setTitle] = useState('testbook')
+  const [author, setAuthor] = useState('testauthor')
+  const [published, setPublished] = useState('1234')
   const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
-
+  const [genres, setGenres] = useState(['testgenre'])
+  const variables = {
+    authorToSearch: null,
+    genreToSearch: null
+  }
   const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [
       { query: ALL_AUTHORS },
-      { query: ALL_BOOKS }
-    ]
+      { query: ALL_BOOKS, variables }
+    ],
+    awaitRefetchQueries: true,
   })
 
   if (!props.show) {
@@ -23,7 +27,6 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    console.log('add book...')
     try {
       await createBook({
         variables: {
@@ -34,7 +37,6 @@ const NewBook = (props) => {
         }
       })
     } catch (error) {
-      console.log('error', error.extensions)
       console.error('createBook mutation failed:', error)
     }
     setTitle('')
