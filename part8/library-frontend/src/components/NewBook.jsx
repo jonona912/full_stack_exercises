@@ -13,12 +13,52 @@ const NewBook = (props) => {
     genreToSearch: null
   }
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [
-      { query: ALL_AUTHORS },
-      { query: ALL_BOOKS, variables }
-    ],
-    awaitRefetchQueries: true,
-  })
+    update: (cache, { data }) => {
+    const newBook = data?.addBook
+    if (!newBook) return
+
+    cache.updateQuery(
+      {
+        query: ALL_BOOKS,
+        variables: {
+          authorToSearch: null,
+          genreToSearch: null
+        }
+      },
+      (existing) => {
+        if (!existing?.allBooks) {
+          return existing
+        }
+
+        return {
+          ...existing,
+          allBooks: existing.allBooks.concat(newBook) 
+        }
+      }
+      )
+      cache.updateQuery(
+        { query: ALL_AUTHORS },
+        (existing) => {
+          if (!existing?.allAuthors) {
+            return existing
+          }
+
+          const alreadyExists = existing.allAuthors.some(
+            (a) => a.id === newBook.author.id
+          )
+
+          if (alreadyExists) {
+            return existing
+          }
+
+          return {
+            ...existing,
+            allAuthors: existing.allAuthors.concat(newBook.author)
+          }
+        }
+      )
+    }
+    })
 
   if (!props.show) {
     return null

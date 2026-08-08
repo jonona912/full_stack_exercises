@@ -9,18 +9,20 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
-  // if (result.loading) {
-  //   return <div>loading...</div>
-  // }
+  if (result.loading) {
+    return (
+      <div>
+        <h2>authors</h2>
+        <div>loading...</div>
+      </div>
+    )
+  }
 
   const authors = result.data.allAuthors
 
   return (
     <div>
       <h2>authors</h2>
-      {result.loading && <div>loading...</div>}
-      {result.error && <div>failed to load authors</div>}
-      {!result.loading && !result.error && (
         <table>
           <tbody>
             <tr>
@@ -37,7 +39,6 @@ const Authors = (props) => {
             ))}
           </tbody>
         </table>
-      )}
       {token && <EditAuthorForm authors={authors} />}
     </div>
   )

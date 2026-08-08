@@ -8,7 +8,9 @@ const Books = (props) => {
     authorToSearch: null,
     genreToSearch: genre ?? null
   }
-  const result = useQuery(ALL_BOOKS, { variables })
+  const result = useQuery(ALL_BOOKS, { 
+    variables
+  })
 
   if (!props.show) {
     return null
