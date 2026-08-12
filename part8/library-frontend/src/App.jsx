@@ -54,7 +54,7 @@ const App = () => {
 
       <Authors show={page === 'authors'} token={token} />
 
-      <Books show={page === 'books'} />
+      <Books show={page === 'books'} apolloClient={client} />
 
       <NewBook show={page === 'add'} />
 

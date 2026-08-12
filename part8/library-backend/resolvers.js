@@ -1,11 +1,14 @@
 // const { v1: uuid } = require('uuid')
 const { GraphQLError } = require('graphql')
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('graphql-subscriptions')
 
 const User = require('./models/user')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const { errorLogger, debugLogger } = require('./logger')
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -21,7 +24,10 @@ const resolvers = {
       const books = await Book.find(filter).populate('author')
       return books
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      console.log('Fetching all authors')
+       return Author.find({})
+    },
     me: (root, args, context) => {
       return context.currentUser
     }
@@ -74,7 +80,9 @@ const resolvers = {
       const book = new Book({ ...args })
       try {
         const savedBook = await book.save()
-        return savedBook.populate('author') // Populate the author field before returning
+        const populatedBook = await savedBook.populate('author') // Populate the author field before returning
+        pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
+        return populatedBook
       } catch (error) {
         throw new GraphQLError('Saving book failed!!!', {
           extensions: {
@@ -147,24 +155,18 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {
+      console.log(`author.bookCount`)
       // Counts documents where the author field matches the current author's ID or name
       const count = await Book.countDocuments({ author: root.id })
       return count
     }
-  }
-  
-  
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED')
+    },
+  },
 
 }
 
-
-
 module.exports = resolvers
-
-
-
-
-
-
-
-
