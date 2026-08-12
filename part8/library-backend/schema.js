@@ -57,6 +57,9 @@ const typeDefs = /* GraphQL */ `
   
     _resetDatabase: Boolean
   }
+  type Subscription {
+    bookAdded: Book!
+  }
 `
 
 module.exports = typeDefs

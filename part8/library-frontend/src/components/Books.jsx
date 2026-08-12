@@ -1,15 +1,18 @@
-import { ALL_BOOKS } from "../queries"
-import { useQuery } from "@apollo/client/react"
+import { ALL_BOOKS, BOOK_ADDED } from "../queries"
+import { useQuery, useSubscription } from "@apollo/client/react"
 import { useState } from "react"
+import { addBookToCache } from "../utils/apolloCache"
 
 const Books = (props) => {
   const [genre, setGenre] = useState(null)
-  const variables = {
-    authorToSearch: null,
-    genreToSearch: genre ?? null
-  }
-  const result = useQuery(ALL_BOOKS, { 
-    variables
+  const result = useQuery(ALL_BOOKS)
+  const client = props.apolloClient
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      addBookToCache(client.cache, addedBook)
+    },
   })
 
   if (!props.show) {
@@ -19,6 +22,7 @@ const Books = (props) => {
   if (result.loading) {
     return <div>loading...</div>
   }
+
   if (result.error) {
     console.error('Error fetching books:', result.error)
     return <div>Error fetching books</div>

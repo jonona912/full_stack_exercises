@@ -1,0 +1,11 @@
+{
+  "name": "part8-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n backend,frontend -c blue,green \"npm --prefix library-backend run dev\" \"npm --prefix library-frontend run dev\"",
+    "install": "npm --prefix library-backend install && npm --prefix library-frontend install"
+  },
+  "dependencies": {
+    "concurrently": "^10.0.4"
+  }
+}
